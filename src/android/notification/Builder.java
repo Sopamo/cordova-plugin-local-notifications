@@ -118,7 +118,9 @@ public class Builder {
         Uri sound     = options.getSoundUri();
         int smallIcon = options.getSmallIcon();
         int ledColor  = options.getLedColor();
-        NotificationCompat.Builder builder;
+        int headsup   = options.getHeadsup();
+        long when     = options.getWhen();
+        final NotificationCompat.Builder builder;
 
         builder = new NotificationCompat.Builder(context)
                 .setDefaults(0)
@@ -129,6 +131,19 @@ public class Builder {
                 .setAutoCancel(options.isAutoClear())
                 .setOngoing(options.isOngoing())
                 .setColor(options.getColor());
+
+        if(when > 0) {
+            builder.setWhen(when);
+            // builder.setProgress(100, 0, false);
+        }
+
+        builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+
+
+        if (headsup == 1) {
+            builder.setVibrate(new long[] { 0, 1000, 1000, 1000 });
+            builder.setPriority(NotificationCompat.PRIORITY_MAX);
+        }
 
         if (ledColor != 0) {
             builder.setLights(ledColor, options.getLedOnTime(), options.getLedOffTime());

@@ -64,7 +64,7 @@ public class Options {
      *      Application context
      */
     public Options(Context context){
-    	this.context = context;
+        this.context = context;
         this.assets  = AssetUtil.getInstance(context);
     }
 
@@ -176,6 +176,20 @@ public class Options {
      */
     public int getBadgeNumber() {
         return options.optInt("badge", 0);
+    }
+
+    /**
+     * Badge number for the local notification.
+     */
+    public int getHeadsup() {
+        return options.optInt("headsup", 0);
+    }
+
+    /**
+     * Badge number for the local notification.
+     */
+    public long getWhen() {
+        return options.optLong("when", 0);
     }
 
     /**

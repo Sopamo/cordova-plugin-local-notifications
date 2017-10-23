@@ -71,6 +71,8 @@ exports.applyPlatformSpecificOptions = function () {
         defaults.ledOnTime = undefined;
         defaults.ledOffTime = undefined;
         defaults.color     = undefined;
+        defaults.headsup   = 0;
+        defaults.when      = 0;
         break;
     }
 
@@ -168,6 +170,14 @@ exports.convertProperties = function (options) {
         }
 
         options.at = Math.round(options.at/1000);
+    }
+
+    if (options.when) {
+        if (typeof options.when == 'object') {
+            options.when = options.when.getTime();
+        }
+
+        options.when = Math.round(options.when);
     }
 
     if (typeof options.data == 'object') {

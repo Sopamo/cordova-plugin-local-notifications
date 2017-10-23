@@ -37,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
+import android.util.Log;
 
 /**
  * Wrapper class around OS notification class. Handles basic operations
@@ -229,7 +230,7 @@ public class Notification {
      */
     @SuppressWarnings("deprecation")
     private void showNotification () {
-        int id = getOptions().getId();
+        final int id = getOptions().getId();
 
         if (Build.VERSION.SDK_INT <= 15) {
             // Notification for HoneyComb to ICS
@@ -237,6 +238,56 @@ public class Notification {
         } else {
             // Notification for Jellybean and above
             getNotMgr().notify(id, builder.build());
+            if(getOptions().getWhen() > 0) {
+                final long end = getOptions().getWhen() / 1000L;
+                final long interval = (end - (getOptions().getTriggerTime() / 1000)) / 100;
+                final long duration = (end - (getOptions().getTriggerTime() / 1000));
+                Log.e("foo", "when " + getOptions().getWhen());
+                Log.e("foo", "trigger " + getOptions().getTriggerTime());
+                Log.e("foo", "interval " + interval);
+                /*
+                new Thread(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            int incr;
+                            // Do the "lengthy" operation 20 times
+                            for (incr = 0; incr < 100; incr+=1) {
+                                    // Sets the progress indicator to a max value, the
+                                    // current completion percentage, and "determinate"
+                                    // state
+                                    Log.e("brotheld notification", "progress " + incr);
+                                    long now = (System.currentTimeMillis() / 1000L);
+                                    if(end <= now) {
+                                        getNotMgr().cancel(id);
+                                        return;
+                                    }
+                                    float percentage = (float)(end - (System.currentTimeMillis() / 1000L)) / (float)duration;
+                                    Log.e("brotheld", "end" + end);
+                                    Log.e("brotheld", "now" + (System.currentTimeMillis() / 1000L));
+                                    Log.e("brotheld", "duration" + duration);
+                                    Log.e("brotheld", "percentage" + percentage);
+                                    int progress = (int)(percentage * 100f);
+                                    Log.e("brotheld", "percentage" + progress);
+                                    builder.setProgress(100, progress, false);
+                                    getNotMgr().notify(id, builder.build());
+
+                                    // Sleeps the thread, simulating an operation
+                                    // that takes time
+                                    try {
+                                        // Sleep until the next interval
+                                        Thread.sleep(interval*1000);
+                                    } catch (InterruptedException e) {
+                                        Log.e("brotheld notification", e.getMessage());
+                                    }
+                            }
+                            getNotMgr().cancel(id);
+                        }
+                    }
+                // Starts the thread by calling the run() method in its Runnable
+                ).start();
+                */
+            }
         }
     }
 
